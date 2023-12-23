@@ -6,6 +6,7 @@ import {AppDispatch, RootState, useAppDispatch} from '@/redux/store';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
+import Loading from '@/components/Loading/Loading';
 
 export default function Activities() {
   const dispatch: AppDispatch = useAppDispatch();
@@ -23,7 +24,7 @@ export default function Activities() {
   return (
     <Container>
       <Title>Activities</Title>
-      {loading && <p>Loading...</p>}
+      {loading && <Loading />}
       {error && <p>{error}</p>}
       <div style={{display: 'flex', justifyContent: 'center'}}>
         {activities.map(activity => (
