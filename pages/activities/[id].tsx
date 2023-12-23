@@ -1,10 +1,13 @@
+import {Container, Title} from '@/styles/sharedstyles';
+import {ReservationForm} from '@/components/ReservationForm/ReservationForm';
 import {Activity} from '@/interfaces/activity';
+import Reservation from '@/interfaces/reservation';
 import {fetchActivity} from '@/redux/actions/activity.actions';
 import {AppDispatch, RootState, useAppDispatch} from '@/redux/store';
-import {AsyncThunkAction, Dispatch, UnknownAction} from '@reduxjs/toolkit';
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
+
 const activity = () => {
   const router = useRouter();
   const {id} = router.query;
@@ -22,19 +25,30 @@ const activity = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const handleReservationSubmit = (reservation: Reservation) => {
+    router.push('/payment');
+  };
+
+  const handleBackToActivities = () => {
+    router.push('/activities');
+  };
+
   return (
-    <div>
-      <h1>Activity Detail Page</h1>
+    <Container>
+      <Title>Reservation</Title>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {activity && (
         <div>
-          <p>{activity.name}</p>
-          <p>{activity.date}</p>
           <p>{activity.details}</p>
         </div>
       )}
-    </div>
+
+      <ReservationForm
+        onReservationSubmit={handleReservationSubmit}
+        onCancel={handleBackToActivities}
+      />
+    </Container>
   );
 };
 

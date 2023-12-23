@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import {Container, Main} from '@/components/sharedstyles';
+import {Container, Main} from '@/styles/sharedstyles';
 import Activities from './activities';
 
 export default function Home() {
