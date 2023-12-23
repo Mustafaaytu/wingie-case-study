@@ -1,5 +1,7 @@
 'use client';
-import { fetchActivities } from '@/redux/actions/activity.actions';
+import {Container, Title} from '@/styles/sharedstyles';
+import {Card} from './styles';
+import {fetchActivities} from '@/redux/actions/activity.actions';
 import {AppDispatch, RootState, useAppDispatch} from '@/redux/store';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
@@ -19,16 +21,20 @@ export default function Activities() {
   }, []);
 
   return (
-    <div>
-      <h1>Activites</h1>
+    <Container>
+      <Title>Activities</Title>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      {activities.map(activity => (
-        <div key={activity.id}>
-          <p>{activity.name}</p>
-          <p>{activity.date}</p>
-        </div>
-      ))}
-    </div>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        {activities.map(activity => (
+          <Card key={activity.id}>
+            <p>{activity.name}</p>
+            <p>{activity.date}</p>
+            <p>{activity.details}</p>
+            <Link href={`/activities/${activity.id}`}>Select</Link>
+          </Card>
+        ))}
+      </div>
+    </Container>
   );
 }
