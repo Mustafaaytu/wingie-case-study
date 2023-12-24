@@ -3,6 +3,7 @@ import { ThemeProvider, type DefaultTheme } from 'styled-components'
 import GlobalStyle from '@/styles/globalstyles'
 import { Provider } from 'react-redux'
 import { store } from '@/redux/store'
+import Navigation from '@/components/Navigation/Navigation'
 
 const theme: DefaultTheme = {
   colors: {
@@ -17,6 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
+          <Navigation />
           <Component {...pageProps} />
         </ThemeProvider>
       </Provider>
