@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import {Container, Main} from '@/styles/sharedstyles';
-import Activities from './activities';
+import Head from 'next/head'
+import { Container, Main } from '@/styles/sharedstyles'
+import Activities from './activities'
 
 export default function Home() {
   return (
@@ -17,5 +17,5 @@ export default function Home() {
         <Activities />
       </Main>
     </Container>
-  );
+  )
 }

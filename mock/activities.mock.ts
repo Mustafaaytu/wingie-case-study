@@ -1,5 +1,4 @@
-import { Activity } from "@/interfaces/activity";
-
+import { Activity } from '@/interfaces/activity'
 
 export const activitiesMockData: Activity[] = [
   {
@@ -20,4 +19,4 @@ export const activitiesMockData: Activity[] = [
     date: '2023-03-01',
     details: 'Details of Activity 3',
   },
-];
+]
