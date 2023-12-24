@@ -1,6 +1,8 @@
 {
   "private": true,
   "scripts": {
+    "lint": "eslint.",
+    "format": "prettier --write .",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
@@ -19,6 +21,24 @@
     "@types/node": "^18.19.3",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.14",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-react": "^7.33.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
     "typescript": "^5.3.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,md}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
