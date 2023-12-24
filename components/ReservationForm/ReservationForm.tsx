@@ -1,26 +1,30 @@
-import React, { useMemo } from 'react'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
-import Reservation from '@/interfaces/reservation'
-import { useRouter } from 'next/router'
+import React, {useMemo} from 'react';
+import {useFormik} from 'formik';
+import * as yup from 'yup';
+import {AppDispatch} from '@/redux/store';
+import {useRouter} from 'next/router';
 import {
   StyledForm,
   StyledInput,
   StyledErrorMessage,
   StyledButton,
   StyledCancelButton,
-} from '@/styles/sharedstyles'
+} from '@/styles/sharedstyles';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '@/redux/store';
+import {create} from '@/redux/actions/reservation.actions';
+import {Activity} from '@/interfaces/activity';
 
 interface ReservationFormProps {
-  onReservationSubmit: (reservation: Reservation) => void
-  onCancel: () => void
+  onCancel: () => void;
 }
 
-const ReservationForm: React.FC<ReservationFormProps> = ({
-  onReservationSubmit,
-  onCancel,
-}) => {
-  const router = useRouter()
+const ReservationForm: React.FC<ReservationFormProps> = ({onCancel}) => {
+  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const activity: Activity | undefined = useSelector(
+    (state: RootState) => state.activities.activity
+  );
 
   const reservationSchema = useMemo(
     () =>
@@ -32,51 +36,37 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             .string()
             .email('Invalid email address')
             .required('Email is required'),
-          birthDate: yup
-            .mixed()
-            .test(
-              'age',
-              'Reservations cannot be made for participants under the age of 18.',
-              (value) => {
-                const isDate = yup.date().isValidSync(value)
-                if (!isDate) {
-                  return false
-                }
-
-                const birthDate = new Date(value ?? '')
-                const today = new Date()
-                const age = today.getFullYear() - birthDate.getFullYear()
-                return age >= 18
-              },
-            )
-            .required('Birth Date is required'),
+          numberOfPeople: yup
+            .number()
+            .integer('Number of people must be an integer')
+            .min(1, 'Number of people must be at least 1')
+            .required('Number of people is required'),
           phone: yup
             .string()
             .matches(
               /^\+(?:[0-9] ?){6,14}[0-9]$/,
-              'Invalid phone number format',
+              'Invalid phone number format'
             )
             .required('Phone Number is required'),
         })
         .strict(),
-    [],
-  )
+    []
+  );
 
   const formik = useFormik({
     initialValues: {
       name: '',
       email: '',
-      birthDate: '',
       phone: '',
+      numberOfPeople: 1,
     },
     validationSchema: reservationSchema,
-    onSubmit: (values) => {
-      onReservationSubmit(values)
-
-      // Ödeme sayfasına yönlendirme
-      router.push('/payment')
+    onSubmit: values => {
+      //onReservationSubmit(values);
+      dispatch(create({...values, activityId: activity?.id!}));
+      //router.push('/payment');
     },
-  })
+  });
 
   return (
     <StyledForm onSubmit={formik.handleSubmit}>
@@ -109,17 +99,20 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         )}
       </div>
       <div>
-        <label htmlFor="birthDate">Birth Date:</label>
+        <label htmlFor="numberOfPeople">Number of People:</label>
         <StyledInput
-          type="date"
-          id="birthDate"
-          name="birthDate"
-          value={formik.values.birthDate}
+          type="number"
+          id="numberOfPeople"
+          name="numberOfPeople"
+          min="1"
+          value={formik.values.numberOfPeople}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.values.birthDate && formik.errors.birthDate && (
-          <StyledErrorMessage>{formik.errors.birthDate}</StyledErrorMessage>
+        {formik.touched.numberOfPeople && formik.errors.numberOfPeople && (
+          <StyledErrorMessage>
+            {formik.errors.numberOfPeople}
+          </StyledErrorMessage>
         )}
       </div>
       <div>
@@ -143,7 +136,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         Cancel
       </StyledCancelButton>
     </StyledForm>
-  )
-}
+  );
+};
 
-export { ReservationForm }
+export {ReservationForm};

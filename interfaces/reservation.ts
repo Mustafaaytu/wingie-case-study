@@ -1,8 +1,9 @@
-interface Reservation {
-  name: string
-  email: string
-  phone: string
-  birthDate: string
+export interface Reservation {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  numberOfPeople: number;
+  activityId: string;
+  
 }
-
-export default Reservation
