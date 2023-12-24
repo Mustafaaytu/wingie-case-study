@@ -8,21 +8,17 @@ import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import Loading from '@/components/Loading/Loading';
 import {useRouter} from 'next/router';
+import withAuth from '@/components/WithAuth/WithAuth';
 
-export default function Activities() {
+const Activities = () => {
   const dispatch: AppDispatch = useAppDispatch();
-  const router = useRouter();
   const activities = useSelector(
     (state: RootState) => state.activities.activities
   );
   const loading = useSelector((state: RootState) => state.activities.loading);
   const error = useSelector((state: RootState) => state.activities.error);
-  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
     dispatch(fetchActivities());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -44,4 +40,6 @@ export default function Activities() {
       </div>
     </Container>
   );
-}
+};
+
+export default withAuth(Activities);

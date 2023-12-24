@@ -2,7 +2,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {User} from '@/interfaces/user';
 import {login, signup} from '../actions/auth.actions';
-import {sign} from 'crypto';
 
 interface AuthState {
   user?: User; // Assume you have a User interface
@@ -19,7 +18,11 @@ const initialState: AuthState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    updateUser: (state, action) => {
+      state.user = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(login.pending, state => {
@@ -51,3 +54,4 @@ export const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+export const {updateUser} = authSlice.actions;

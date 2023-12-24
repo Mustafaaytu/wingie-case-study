@@ -7,8 +7,9 @@ import { AppDispatch, RootState, useAppDispatch } from '@/redux/store'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import withAuth from '@/components/WithAuth/WithAuth'
 
-const activity = () => {
+const Activity = () => {
   const router = useRouter()
   const { id } = router.query
   const dispatch: AppDispatch = useAppDispatch()
@@ -52,4 +53,4 @@ const activity = () => {
   )
 }
 
-export default activity
+export default withAuth(Activity)
