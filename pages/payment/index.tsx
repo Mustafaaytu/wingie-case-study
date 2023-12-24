@@ -44,6 +44,7 @@ const PaymentPage: React.FC = () => {
       // Clear timer on component unmount
       return () => clearTimeout(redirectTimer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPaymentSuccessful]);
 
   return (

@@ -42,6 +42,7 @@ const PaymentForm: React.FC = () => {
           .required('CVV is required')
           .matches(/^\d{3}$/, 'Invalid CVV'),
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

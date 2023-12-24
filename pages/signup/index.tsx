@@ -2,20 +2,20 @@ import SignupForm from '@/components/SignupForm/SignupForm';
 import {Container, Title} from '@/styles/sharedstyles';
 import {RootState} from '@/redux/store';
 import {useRouter} from 'next/router';
-import React, { use, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, {use, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 const Signup: React.FC = () => {
   const router = useRouter();
 
   const authSuccess = useSelector((state: RootState) => state.auth.success);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (authSuccess) {
       router.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authSuccess]);
-
 
   return (
     <Container>

@@ -13,6 +13,7 @@ const LoginPage: React.FC = () => {
     if (user) {
       router.push('/activities');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (
