@@ -1,6 +1,6 @@
 'use client';
 import {Container, Title} from '@/styles/sharedstyles';
-import {Card} from './styles';
+import {Card} from '@/components/Card/Card';
 import {fetchActivities} from '@/redux/actions/activity.actions';
 import {AppDispatch, RootState, useAppDispatch} from '@/redux/store';
 import Link from 'next/link';
