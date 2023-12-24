@@ -17,6 +17,8 @@ const PaymentForm: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
   const {reservationId} = router.query;
+  const currentYear = new Date().getFullYear();
+
   const paymentSchema = useMemo(
     () =>
       yup.object().shape({
