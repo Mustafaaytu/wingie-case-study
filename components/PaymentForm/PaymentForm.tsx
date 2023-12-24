@@ -1,28 +1,22 @@
 // components/PaymentForm.tsx
-import React, { useMemo } from 'react'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
+import React, {useMemo} from 'react';
+import {useFormik} from 'formik';
+import * as yup from 'yup';
+import {AppDispatch} from '@/redux/store';
 import {
   StyledForm,
   StyledInput,
   StyledErrorMessage,
   StyledButton,
-} from '@/styles/sharedstyles'
+} from '@/styles/sharedstyles';
+import {useRouter} from 'next/router';
+import {useDispatch} from 'react-redux';
+import {payment} from '@/redux/actions/reservation.actions';
 
-interface PaymentFormProps {
-  onSubmit: (values: PaymentFormValues) => void
-}
-
-export interface PaymentFormValues {
-  cardHolder: string
-  cardNumber: string
-  expirationMonth: string
-  expirationYear: string
-  cvv: string
-  expirationDate?: string
-}
-
-const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
+const PaymentForm: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const router = useRouter();
+  const {reservationId} = router.query;
   const paymentSchema = useMemo(
     () =>
       yup.object().shape({
@@ -34,18 +28,20 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
         expirationMonth: yup
           .string()
           .required('Expiration Month is required')
-          .matches(/^(0?[1-9]|1[0-2])$/, 'Invalid month'),
+          .matches(/^(0?[1-9]|1[0-2])$/, 'Invalid month')
+          .max(12, 'Month cannot be greater than 12'),
         expirationYear: yup
           .string()
           .required('Expiration Year is required')
-          .matches(/^[0-9]{4}$/, 'Invalid year'),
+          .matches(/^[0-9]{4}$/, 'Invalid year')
+          .min(currentYear, 'Year cannot be in the past'),
         cvv: yup
           .string()
           .required('CVV is required')
           .matches(/^\d{3}$/, 'Invalid CVV'),
       }),
-    [],
-  )
+    []
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -56,27 +52,31 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
       cvv: '',
     },
     validationSchema: paymentSchema,
-    onSubmit: (values) => {
-      const cleanedCardNumber = values.cardNumber.replace(/\s/g, '')
+    onSubmit: values => {
+      const cleanedCardNumber = values.cardNumber.replace(/\s/g, '');
       const formattedExpirationDate = `${values.expirationMonth.padStart(
         2,
-        '0',
-      )}/${values.expirationYear}`
-      onSubmit({
-        ...values,
-        cardNumber: cleanedCardNumber,
-        expirationDate: formattedExpirationDate,
-      })
+        '0'
+      )}/${values.expirationYear}`;
+      dispatch(
+        payment({
+          ...values,
+          cardNumber: cleanedCardNumber,
+          expirationDate: formattedExpirationDate,
+          reservationId: reservationId as string,
+          amount: Math.floor(Math.random() * 100),
+        })
+      );
     },
-  })
+  });
 
   const formatCardNumber = (value: string): string => {
-    let formattedValue = value.replace(/\s/g, '')
+    let formattedValue = value.replace(/\s/g, '');
     if (formattedValue.length > 16) {
-      formattedValue = formattedValue.slice(0, 16)
+      formattedValue = formattedValue.slice(0, 16);
     }
-    return formattedValue.replace(/(\d{4})/g, '$1 ').trim()
-  }
+    return formattedValue.replace(/(\d{4})/g, '$1 ').trim();
+  };
 
   return (
     <StyledForm onSubmit={formik.handleSubmit}>
@@ -105,10 +105,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
           name="cardNumber"
           placeholder="1234 5678 9012 3456"
           value={formatCardNumber(formik.values.cardNumber)}
-          onChange={(e) => {
-            const cleanedValue = e.target.value.replace(/\s/g, '')
-            formik.handleChange(e)
-            formik.setFieldValue('cardNumber', cleanedValue)
+          onChange={e => {
+            const cleanedValue = e.target.value.replace(/\s/g, '');
+            formik.handleChange(e);
+            formik.setFieldValue('cardNumber', cleanedValue);
           }}
           onBlur={formik.handleBlur}
         />
@@ -174,7 +174,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
       </div>
       <StyledButton type="submit">Submit Payment</StyledButton>
     </StyledForm>
-  )
-}
+  );
+};
 
-export default PaymentForm
+export default PaymentForm;

@@ -5,6 +5,9 @@ import {useSelector} from 'react-redux';
 import {RootState} from '@/redux/store';
 import styled from 'styled-components';
 import {useRouter} from 'next/router';
+import {AppDispatch} from '@/redux/store';
+import {useDispatch} from 'react-redux';
+import {clearUser} from '@/redux/reducers/auth.reducer';
 
 const NavigationContainer = styled.nav`
   position: absolute;
@@ -39,11 +42,23 @@ const NavigationContainer = styled.nav`
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
   }
+
+  .logout-link {
+    cursor: pointer;
+  }
 `;
 
 const Navigation: React.FC = () => {
   const auth = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleLogout = () => {
+    // Perform logout actions, clear state and local storage
+    dispatch(clearUser());
+    localStorage.removeItem('auth');
+    router.push('/login');
+  };
 
   return (
     <NavigationContainer>
@@ -64,7 +79,9 @@ const Navigation: React.FC = () => {
         )}
         {auth && (
           <li>
-            <Link href="">Logout</Link>
+            <a className="logout-link" onClick={handleLogout}>
+              Logout
+            </a>
           </li>
         )}
       </ul>

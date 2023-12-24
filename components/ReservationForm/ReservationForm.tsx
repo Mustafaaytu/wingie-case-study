@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {useFormik} from 'formik';
 import * as yup from 'yup';
-import Reservation from '@/interfaces/reservation';
+import {AppDispatch} from '@/redux/store';
 import {useRouter} from 'next/router';
 import {
   StyledForm,
@@ -10,17 +10,21 @@ import {
   StyledButton,
   StyledCancelButton,
 } from '@/styles/sharedstyles';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '@/redux/store';
+import {create} from '@/redux/actions/reservation.actions';
+import {Activity} from '@/interfaces/activity';
 
 interface ReservationFormProps {
-  onReservationSubmit: (reservation: Reservation) => void;
   onCancel: () => void;
 }
 
-const ReservationForm: React.FC<ReservationFormProps> = ({
-  onReservationSubmit,
-  onCancel,
-}) => {
+const ReservationForm: React.FC<ReservationFormProps> = ({onCancel}) => {
   const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const activity: Activity | undefined = useSelector(
+    (state: RootState) => state.activities.activity
+  );
 
   const reservationSchema = useMemo(
     () =>
@@ -58,10 +62,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     },
     validationSchema: reservationSchema,
     onSubmit: values => {
-      onReservationSubmit(values);
-
-      // Ödeme sayfasına yönlendirme
-      router.push('/payment');
+      //onReservationSubmit(values);
+      dispatch(create({...values, activityId: activity?.id!}));
+      //router.push('/payment');
     },
   });
 
