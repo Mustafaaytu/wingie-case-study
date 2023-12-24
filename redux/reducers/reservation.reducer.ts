@@ -1,6 +1,6 @@
 import {Reservation} from '@/interfaces/reservation';
 import {createSlice} from '@reduxjs/toolkit';
-import {create, payment} from '../actions/reservation.actions';
+import {create, findById, payment} from '../actions/reservation.actions';
 
 interface ReservationState {
   reservation?: Reservation;
@@ -24,7 +24,7 @@ export const reservationSlice = createSlice({
     },
     clearPayment: state => {
       state.paymentSuccess = undefined;
-    }
+    },
   },
   extraReducers: builder => {
     builder
@@ -49,6 +49,18 @@ export const reservationSlice = createSlice({
         state.paymentSuccess = true;
       })
       .addCase(payment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Something went wrong';
+      })
+      .addCase(findById.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(findById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.reservation = action.payload;
+      })
+      .addCase(findById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Something went wrong';
       });

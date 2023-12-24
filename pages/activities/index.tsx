@@ -7,7 +7,6 @@ import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import Loading from '@/components/Loading/Loading';
-import {useRouter} from 'next/router';
 import withAuth from '@/components/WithAuth/WithAuth';
 
 const Activities = () => {
@@ -40,6 +39,7 @@ const Activities = () => {
             <p className="title">{activity.name}</p>
             <p>{activity.date}</p>
             <p>{activity.description}</p>
+            <p>{activity.price}$</p>
             <Link href={`/activities/${activity.id}`}>Select</Link>
           </Card>
         ))}

@@ -11,7 +11,6 @@ const Card = styled.div`
   width: calc(50% - 16px); /* Two cards per row on mobile */
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 180px;
   position: relative;
 
   p.title {
@@ -28,10 +27,8 @@ const Card = styled.div`
     text-decoration: none;
     color: #007bff;
     font-weight: bold;
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+
     width: 100%;
 
     &:hover {
