@@ -1,26 +1,26 @@
-import React, {useMemo} from 'react';
-import {useFormik} from 'formik';
-import * as yup from 'yup';
-import Reservation from '@/interfaces/reservation';
-import {useRouter} from 'next/router';
+import React, { useMemo } from 'react'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import Reservation from '@/interfaces/reservation'
+import { useRouter } from 'next/router'
 import {
   StyledForm,
   StyledInput,
   StyledErrorMessage,
   StyledButton,
   StyledCancelButton,
-} from '@/styles/sharedstyles';
+} from '@/styles/sharedstyles'
 
 interface ReservationFormProps {
-  onReservationSubmit: (reservation: Reservation) => void;
-  onCancel: () => void;
+  onReservationSubmit: (reservation: Reservation) => void
+  onCancel: () => void
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({
   onReservationSubmit,
   onCancel,
 }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const reservationSchema = useMemo(
     () =>
@@ -37,30 +37,30 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             .test(
               'age',
               'Reservations cannot be made for participants under the age of 18.',
-              value => {
-                const isDate = yup.date().isValidSync(value);
+              (value) => {
+                const isDate = yup.date().isValidSync(value)
                 if (!isDate) {
-                  return false;
+                  return false
                 }
 
-                const birthDate = new Date(value ?? '');
-                const today = new Date();
-                const age = today.getFullYear() - birthDate.getFullYear();
-                return age >= 18;
-              }
+                const birthDate = new Date(value ?? '')
+                const today = new Date()
+                const age = today.getFullYear() - birthDate.getFullYear()
+                return age >= 18
+              },
             )
             .required('Birth Date is required'),
           phone: yup
             .string()
             .matches(
               /^\+(?:[0-9] ?){6,14}[0-9]$/,
-              'Invalid phone number format'
+              'Invalid phone number format',
             )
             .required('Phone Number is required'),
         })
         .strict(),
-    []
-  );
+    [],
+  )
 
   const formik = useFormik({
     initialValues: {
@@ -70,13 +70,13 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       phone: '',
     },
     validationSchema: reservationSchema,
-    onSubmit: values => {
-      onReservationSubmit(values);
+    onSubmit: (values) => {
+      onReservationSubmit(values)
 
       // Ödeme sayfasına yönlendirme
-      router.push('/payment');
+      router.push('/payment')
     },
-  });
+  })
 
   return (
     <StyledForm onSubmit={formik.handleSubmit}>
@@ -143,7 +143,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         Cancel
       </StyledCancelButton>
     </StyledForm>
-  );
-};
+  )
+}
 
-export {ReservationForm};
+export { ReservationForm }
