@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import { Container, Main } from '@/styles/sharedstyles'
 import Activities from './activities'
+import Navigation from '@/components/Navigation/Navigation'
+import BodyWithGradient from '@/components/BodyWithGradient/BodyWithGradient'
 
 export default function Home() {
   return (
@@ -13,9 +15,7 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Main>
-        <Activities />
-      </Main>
+      <Navigation />
     </Container>
   )
 }

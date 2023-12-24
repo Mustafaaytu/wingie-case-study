@@ -5,6 +5,7 @@ import { Container, Title } from '@/styles/sharedstyles'
 import PaymentForm, {
   PaymentFormValues,
 } from '@/components/PaymentForm/PaymentForm'
+import withAuth from '@/components/WithAuth/WithAuth'
 
 const PaymentPage: React.FC = () => {
   const router = useRouter()
@@ -42,4 +43,4 @@ const PaymentPage: React.FC = () => {
   )
 }
 
-export default PaymentPage
+export default withAuth(PaymentPage)
