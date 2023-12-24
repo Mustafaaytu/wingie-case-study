@@ -1,13 +1,12 @@
 'use client';
 import {Container, Title} from '@/styles/sharedstyles';
-import {Card} from './styles';
+import {Card} from '@/components/Card/Card';
 import {fetchActivities} from '@/redux/actions/activity.actions';
 import {AppDispatch, RootState, useAppDispatch} from '@/redux/store';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import Loading from '@/components/Loading/Loading';
-import {useRouter} from 'next/router';
 import withAuth from '@/components/WithAuth/WithAuth';
 
 const Activities = () => {
@@ -40,6 +39,7 @@ const Activities = () => {
             <p className="title">{activity.name}</p>
             <p>{activity.date}</p>
             <p>{activity.description}</p>
+            <p>{activity.price}$</p>
             <Link href={`/activities/${activity.id}`}>Select</Link>
           </Card>
         ))}

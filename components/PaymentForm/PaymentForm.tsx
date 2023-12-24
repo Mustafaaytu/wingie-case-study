@@ -17,6 +17,7 @@ const PaymentForm: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
   const {reservationId} = router.query;
+  
   const paymentSchema = useMemo(
     () =>
       yup.object().shape({
@@ -33,13 +34,13 @@ const PaymentForm: React.FC = () => {
         expirationYear: yup
           .string()
           .required('Expiration Year is required')
-          .matches(/^[0-9]{4}$/, 'Invalid year')
-          .min(currentYear, 'Year cannot be in the past'),
+          .matches(/^[0-9]{4}$/, 'Invalid year'),
         cvv: yup
           .string()
           .required('CVV is required')
           .matches(/^\d{3}$/, 'Invalid CVV'),
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

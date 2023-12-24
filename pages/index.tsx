@@ -1,8 +1,6 @@
-import Head from 'next/head'
-import { Container, Main } from '@/styles/sharedstyles'
-import Activities from './activities'
-import Navigation from '@/components/Navigation/Navigation'
-import BodyWithGradient from '@/components/BodyWithGradient/BodyWithGradient'
+import Head from 'next/head';
+import {Container} from '@/styles/sharedstyles';
+import Navigation from '@/components/Navigation/Navigation';
 
 export default function Home() {
   return (
@@ -17,5 +15,5 @@ export default function Home() {
       </Head>
       <Navigation />
     </Container>
-  )
+  );
 }

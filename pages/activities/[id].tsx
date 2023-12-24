@@ -36,6 +36,7 @@ const Activity = () => {
       dispatch(clearReservation());
       router.push('/payment?reservationId=' + reservation.id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reservation]);
 
   const handleBackToActivities = () => {

@@ -23,6 +23,7 @@ export default function withAuth(Component: React.ComponentType<any>) {
         console.log('redirecc to login');
         router.push('/login');
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <Component {...props} />;
