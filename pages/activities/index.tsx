@@ -28,12 +28,18 @@ const Activities = () => {
       <Title>Activities</Title>
       {loading && <Loading />}
       {error && <p>{error}</p>}
-      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-around',
+        }}
+      >
         {activities.map(activity => (
           <Card key={activity.id}>
-            <p>{activity.name}</p>
+            <p className="title">{activity.name}</p>
             <p>{activity.date}</p>
-            <p>{activity.details}</p>
+            <p>{activity.description}</p>
             <Link href={`/activities/${activity.id}`}>Select</Link>
           </Card>
         ))}
