@@ -1,5 +1,5 @@
 import {Activity} from '@/interfaces/activity';
-import {addAuthorizationHeader} from '@/utils/api.util';
+import {addAuthorizationHeader} from '@/utils/api.utils';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 export const fetchActivities = createAsyncThunk<
@@ -16,10 +16,10 @@ export const fetchActivities = createAsyncThunk<
       throw new Error('Failed to fetch activities.');
     }
 
-    const activities: Activity[] = await response.json();
+    let activities: Activity[] = await response.json();
 
     // Sort activities by date
-    activities.sort(
+    activities = activities.sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 

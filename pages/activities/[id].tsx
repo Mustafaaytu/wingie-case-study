@@ -4,14 +4,16 @@ import {Activity} from '@/interfaces/activity';
 import {Reservation} from '@/interfaces/reservation';
 import {fetchActivity} from '@/redux/actions/activity.actions';
 import {AppDispatch, RootState, useAppDispatch} from '@/redux/store';
+import {useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
-import {use, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import withAuth from '@/components/WithAuth/WithAuth';
-import {clear} from 'console';
+
 import {clearReservation} from '@/redux/reducers/reservation.reducer';
 
 const Activity = () => {
+  const [remainingTime, setRemainingTime] = useState(900);
+  const [redirectTimer, setRedirectTimer] = useState(3);
   const router = useRouter();
   const {id} = router.query;
   const dispatch: AppDispatch = useAppDispatch();
@@ -25,23 +27,56 @@ const Activity = () => {
   );
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingTime(prevTime => (prevTime > 0 ? prevTime - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (remainingTime === 0 && redirectTimer > 0) {
+      const timerInterval = setInterval(() => {
+        setRedirectTimer(prevTimer => (prevTimer > 0 ? prevTimer - 1 : 0));
+      }, 1000);
+
+      return () => clearInterval(timerInterval);
+    } else if (remainingTime === 0 && redirectTimer === 0) {
+      dispatch(clearReservation());
+      router.push('/activities');
+    }
+  }, [remainingTime, redirectTimer, dispatch, router]);
+
+  useEffect(() => {
     if (id) {
       dispatch(fetchActivity(String(id)));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (reservation) {
       dispatch(clearReservation());
       router.push('/payment?reservationId=' + reservation.id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reservation]);
+  }, [reservation, dispatch, router]);
 
   const handleBackToActivities = () => {
     router.push('/activities');
   };
+
+  if (remainingTime === 0) {
+    return (
+      <Container>
+        <Title>Reservation</Title>
+        {redirectTimer > 0 && (
+          <p>
+            Your reservation period has expired! Redirecting in {redirectTimer}
+            ...
+          </p>
+        )}
+      </Container>
+    );
+  }
 
   return (
     <Container>

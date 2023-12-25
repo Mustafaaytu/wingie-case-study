@@ -1,6 +1,6 @@
 import {Payment} from '@/interfaces/payment';
 import {Reservation} from '@/interfaces/reservation';
-import {addAuthorizationHeader} from '@/utils/api.util';
+import {addAuthorizationHeader} from '@/utils/api.utils';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 interface ReservationRequest extends Omit<Reservation, 'id' | 'activity'> {
